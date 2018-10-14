@@ -20,7 +20,11 @@
           <td><%= bill_item.quantity %> * <%= @item.price %></td>
         </tr>
     <% end %>
-    <td>Total Price ====>>>> <%= @bill.total %></td>
+    <td>Total  (Before Tax):  <%= @bill.total %></td>
+    <tr>
+    <% fifteen_percent = @bill.total * 0.15 %>
+    <td>Final Value:  <%= @bill.total + fifteen_percent %></td>
+    </tr>
   </tr>
 </tbody>
 </table>
