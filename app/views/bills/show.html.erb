@@ -1,19 +1,29 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Item ids:</strong>
-  <%= @bill.item_ids %>
-</p>
+<table>
+  <thead>
+    <tr>
+      <th>Items</th>
+      <th>Quantity</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
 
-<p>
-  <strong>Quantity:</strong>
-  <%= @bill.quantity %>
-</p>
+  <tbody>
 
-<p>
-  <strong>Total:</strong>
-  <%= @bill.total %>
-</p>
+  <tr>
+    <td>Bill ID : <%= @bill.id %> </td>
+    <% @bill.bill_items.each do |bill_item| %>
+      <% @item = Item.find(bill_item.item_id) %>
+        <tr>
+          <td><%= @item.name %></td>
+          <td><%= bill_item.quantity %> * <%= @item.price %></td>
+        </tr>
+    <% end %>
+    <td>Total Price ====>>>> <%= @bill.total %></td>
+  </tr>
+</tbody>
+</table>
 
-<%= link_to 'Edit', edit_bill_path(@bill) %> |
-<%= link_to 'Back', bills_path %>
+  <%= link_to 'Edit', edit_bill_path(@bill) %> |
+  <%= link_to 'Back', bills_path %>

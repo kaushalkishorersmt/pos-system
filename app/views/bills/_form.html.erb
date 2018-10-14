@@ -11,19 +11,14 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :item_ids %>
-    <%= form.number_field :item_ids %>
-  </div>
+  <div class="box">
+    <%= form.fields_for :bill_items do |p| %>
+      <%= render 'bill_item_fields', p: p %>
+    <% end %>
 
-  <div class="field">
-    <%= form.label :quantity %>
-    <%= form.number_field :quantity %>
-  </div>
-
-  <div class="field">
-    <%= form.label :total %>
-    <%= form.text_field :total %>
+    <div class="box-header with-border">
+      <%= link_to_bill_item_fields "Add Item", form, :bill_items %>
+    </div>
   </div>
 
   <div class="actions">

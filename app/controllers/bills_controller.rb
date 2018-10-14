@@ -28,6 +28,7 @@ class BillsController < ApplicationController
 
     respond_to do |format|
       if @bill.save
+        calculate_total(@bill)
         format.html { redirect_to @bill, notice: 'Bill was successfully created.' }
         format.json { render :show, status: :created, location: @bill }
       else
@@ -42,6 +43,7 @@ class BillsController < ApplicationController
   def update
     respond_to do |format|
       if @bill.update(bill_params)
+        calculate_total(@bill)
         format.html { redirect_to @bill, notice: 'Bill was successfully updated.' }
         format.json { render :show, status: :ok, location: @bill }
       else
@@ -62,6 +64,17 @@ class BillsController < ApplicationController
   end
 
   private
+
+    def calculate_total(bill)
+      total_price = 0
+      bill.bill_items.each do |bill_item|
+        @item = Item.find(bill_item.item_id)
+        total_price += @item.price * bill_item.quantity
+      end
+      bill.update_attributes(total: total_price)
+    end
+
+
     # Use callbacks to share common setup or constraints between actions.
     def set_bill
       @bill = Bill.find(params[:id])
@@ -69,6 +82,6 @@ class BillsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def bill_params
-      params.require(:bill).permit(:item_ids, :quantity, :total)
+      params.require(:bill).permit(:item_ids, :quantity, :total, {bill_items_attributes: [:id, :item_id, :quantity]})
     end
 end

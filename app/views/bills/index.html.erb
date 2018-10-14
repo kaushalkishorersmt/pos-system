@@ -5,9 +5,8 @@
 <table>
   <thead>
     <tr>
-      <th>Item ids</th>
+      <th>Items</th>
       <th>Quantity</th>
-      <th>Total</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -15,12 +14,15 @@
   <tbody>
     <% @bills.each do |bill| %>
       <tr>
-        <td><%= bill.item_ids %></td>
-        <td><%= bill.quantity %></td>
-        <td><%= bill.total %></td>
-        <td><%= link_to 'Show', bill %></td>
-        <td><%= link_to 'Edit', edit_bill_path(bill) %></td>
-        <td><%= link_to 'Destroy', bill, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>Bill ID : <%= bill.id %> | <%= link_to 'Show', bill %> | <%= link_to 'Edit', edit_bill_path(bill) %> | <%= link_to 'Destroy', bill, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% bill.bill_items.each do |bill_item| %>
+          <% @item = Item.find(bill_item.item_id) %>
+            <tr>
+              <td><%= @item.name %></td>
+              <td><%= bill_item.quantity %></td>
+            </tr>
+        <% end %>
+        <td>Total Price ====>>>> <%= bill.total %></td>
       </tr>
     <% end %>
   </tbody>

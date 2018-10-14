@@ -1,0 +1,10 @@
+<div class="field">
+  <%= p.label :item_id %>
+  <%#= p.collection_select :main_product_id, MainProduct.all, :id, :title, {}, { class: 'p-control', disabled: true , prompt: "qun"} %>
+  <%= p.collection_select(:item_id, Item.all, :id, :name,{}) %>
+</div>
+
+<div class="field">
+  <%= p.label :quantity %>
+  <%= p.number_field :quantity %>
+</div>

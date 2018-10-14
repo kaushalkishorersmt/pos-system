@@ -4,7 +4,13 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
-    @items = Item.all
+    if params[:item].present?
+      tag_id =  params[:item][:tag_ids].to_i
+      item_ids = ItemsTag.where(tag_id: tag_id).pluck(:item_id).uniq
+      @items = Item.where(id: item_ids)
+    else
+      @items = Item.all
+    end
   end
 
   # GET /items/1

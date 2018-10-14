@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_13_141657) do
+ActiveRecord::Schema.define(version: 2018_10_14_082542) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bill_items", force: :cascade do |t|
+    t.integer "item_id"
+    t.integer "quantity"
+    t.bigint "bill_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bill_id"], name: "index_bill_items_on_bill_id"
+  end
 
   create_table "bills", force: :cascade do |t|
     t.integer "item_ids", default: [], array: true
@@ -21,6 +30,7 @@ ActiveRecord::Schema.define(version: 2018_10_13_141657) do
     t.decimal "total"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "item_quantities", default: [], array: true
   end
 
   create_table "items", force: :cascade do |t|
@@ -55,4 +65,5 @@ ActiveRecord::Schema.define(version: 2018_10_13_141657) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "bill_items", "bills"
 end

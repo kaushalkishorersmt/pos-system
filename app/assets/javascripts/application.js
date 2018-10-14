@@ -31,3 +31,11 @@ function chosen_init() {
 }
 
 $(document).on('turbolinks:load', function(){chosen_init()});
+
+$(document).on('click', 'form .bill_item_fields', function(event) {
+    var regexp, time;
+    time = new Date().getTime();
+    regexp = new RegExp($(this).data('id'), 'g');
+    $(this).before($(this).data('fields').replace(regexp, time));
+    return event.preventDefault();
+});
