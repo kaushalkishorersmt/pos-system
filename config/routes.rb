@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :bills
   resources :tags
   resources :items
   devise_for :users

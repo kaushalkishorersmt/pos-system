@@ -5,9 +5,6 @@ class ItemsController < ApplicationController
   # GET /items.json
   def index
     @items = Item.all
-
-
-
   end
 
   # GET /items/1
@@ -30,21 +27,36 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
     @item = Item.new(item_params)
+    tag_ids = params[:item][:tag_ids].map!(&:to_i)
+    tag_ids.drop(1)
 
-    respond_to do |format|
       if @item.save
-        format.html { redirect_to @item, notice: 'Item was successfully created.' }
-        format.json { render :show, status: :created, location: @item }
+        tag_ids.each do |tag_id|
+          ItemsTag.create(tag_id: tag_id, item_id: @item.id)
+        end
+        respond_to do |format|
+          format.html { redirect_to @item, notice: 'Item was successfully created.' }
+          format.json { render :show, status: :created, location: @item }
+        end
       else
-        format.html { render :new }
-        format.json { render json: @item.errors, status: :unprocessable_entity }
+        respond_to do |format|
+          format.html { render :new }
+          format.json { render json: @item.errors, status: :unprocessable_entity }
+        end
       end
-    end
+
   end
 
   # PATCH/PUT /items/1
   # PATCH/PUT /items/1.json
   def update
+    tag_ids = params[:item][:tag_ids].map!(&:to_i)
+    tag_ids.drop(1)
+    ItemsTag.where(item_id: @item.id).destroy_all
+    tag_ids.each do |tag_id|
+      ItemsTag.create(tag_id: tag_id, item_id: @item.id)
+    end
+
     respond_to do |format|
       if @item.update(item_params)
         format.html { redirect_to @item, notice: 'Item was successfully updated.' }
@@ -60,6 +72,7 @@ class ItemsController < ApplicationController
   # DELETE /items/1.json
   def destroy
     @item.destroy
+    ItemsTag.where(item_id: @item.id).destroy_all
     respond_to do |format|
       format.html { redirect_to items_url, notice: 'Item was successfully destroyed.' }
       format.json { head :no_content }
@@ -74,6 +87,6 @@ class ItemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def item_params
-      params.require(:item).permit(:name, :price)
+      params.require(:item).permit(:name, :price, :tag_ids)
     end
 end

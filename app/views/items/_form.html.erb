@@ -21,6 +21,12 @@
     <%= form.text_field :price %>
   </div>
 
+  <div class="field">
+    <%= form.label :tags %>
+    <%#= form.association :tags, as: :select, multiple: true, input_html: { class: 'chosen-select' } %>
+    <%= form.collection_select(:tag_ids, Tag.all, :id, :name,{}, {:multiple => true, :class=> 'chosen-select' } ) %>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>
